@@ -1,9 +1,17 @@
+
 const router = require("express").Router();
 const addressBookController = require("../../controllers/addressBook");
 
 router.get("/", (req, res) => {
 	const result = addressBookController.allAddresses(req, res);
 	// res.send(result);
+	return result;
+});
+
+router.get("/deleteAddress/:id", (req, res) => {
+	const id = parseInt(req.params.id);
+	const result = addressBookController.deleteAddress(req, res, id);
+
 	return result;
 });
 
