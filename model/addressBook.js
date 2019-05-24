@@ -8,15 +8,18 @@ module.exports = class {
 		return rows;
 	}
 
-	static async viewAddress(personid) {
+	static async viewAddress(personId) {
 
 		let conn = await db.getConnection();
 		const rows = await conn.query(
 			"SELECT * FROM `person` JOIN `address` ON `person`.`addressID`=`address`.`addressID` WHERE `personId`=?",
+			[personId]
 		)
-
+		conn.end();
+		return rows;
 
 	}
+
 	static async deleteAddress(personId) {
 		let conn = await db.getConnection();
 		console.log(personId);

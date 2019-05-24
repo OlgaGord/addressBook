@@ -15,6 +15,13 @@ router.get("/deleteAddress/:id", (req, res) => {
 	return result;
 });
 
+router.get("/viewAddress/:id", (req, res) => {
+	const id = parseInt(req.params.id);
+	const result = addressBookController.viewAddress(req, res, id);
+
+	return result;
+});
+
 router.post("/addAddress/", (req, res) => {
 	const result = addressBookController.addAddress(req, res);
 	return result;
