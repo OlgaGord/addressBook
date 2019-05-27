@@ -5,7 +5,7 @@ const config = require("../config/config");
 module.exports = class {
 	static async allAddresses(req, res) {
 		const data = await addressBookModel.getAddresses();
-
+		// console.log(req.ip);
 		return res.json(data);
 	}
 

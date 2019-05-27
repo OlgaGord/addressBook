@@ -1,0 +1,34 @@
+body {
+  background-color: lightgrey;
+}
+
+.person {
+  cursor: pointer;
+  padding: 5px;
+}
+
+#people > span > div:nth-child(even) {
+  background-color: white;
+}
+
+#people > span > div:hover {
+  background-color: darkgray;
+  color: white;
+}
+
+#people {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  max-width: 450px;
+  min-width: 120px;
+  width: 50%;
+  margin: 0 auto;
+  border: 2px solid rgb(10, 15, 25);
+  border-radius: 2px;
+  background-color: rgb(235, 235, 235);
+}
+
+.phone {
+  font-style: italic;
+}
