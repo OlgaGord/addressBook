@@ -6,7 +6,8 @@ const mapboxStyle =
 
 const addressBook = {
 	list: "http://localhost:9000/api/addressbook/",
-	add: "http://localhost:9000/api/addressbook/addAddress/"
+	add: "http://localhost:9000/api/addressbook/addAddress/",
+	del: id => "http://localhost:9000/api/addressbook/deleteAddress/" + id
 };
 
 const toggleAddDialog = show => {
@@ -30,12 +31,27 @@ const entryClick = (map, el) => {
 		map.flyTo({ center: [el.dataset["lng"], el.dataset["lat"]] });
 	}
 };
+let loadingEl = null;
+let loadCount = 0;
+const load = (tick) => {
+	loadCount += tick;
 
+	if (loadingEl !== null) {
+		if (loadCount <= 0) {
+			loadingEl.style.display = "none";
+		} else {
+			loadingEl.style.display = "block";
+		}
+	}
+};
 document.addEventListener("DOMContentLoaded", async () => {
 	// get container for addresses
 	const elPeople = document.getElementById("people");
 	// el to optimize rendering
 	const parent = document.createElement("span");
+
+	loadingEl = document.getElementById("loading");
+
 
 	// a button on the entry form to save entry
 	const btnAddEntryEl = document.getElementById("btnEntryFormAdd");
@@ -68,7 +84,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 				postData[formEls[i].name] = formEls[i].value;
 			}
 		}
-
+		load(1);
 		const data = await fetch(addressBook.add, {
 			method: "POST",
 			headers: {
@@ -78,64 +94,92 @@ document.addEventListener("DOMContentLoaded", async () => {
 			body: JSON.stringify(postData)
 		});
 		await data.json();
+		load(-1);
 
 		toggleAddDialog(false);
+		loadAddressBook();
 	});
 
-	const data = await fetch(addressBook.list);
-	const dataJson = await data.json();
 
-	dataJson.forEach(element => {
-		//console.log(element);
+	const loadAddressBook = async () => {
+		load(1);
+		const data = await fetch(addressBook.list);
+		const dataJson = await data.json();
+		elPeople.innerHTML = "";
 
-		if (element.latlng) {
-			let tmpMarker = new mapboxgl.Marker()
-				.setLngLat([
-					element.latlng.coordinates[1],
-					element.latlng.coordinates[0]
-				])
-				.addTo(map);
-			markers.push(tmpMarker);
-		}
-		const tEl = document.createElement("div");
-		tEl.id = element.personId;
-		if (element.latlng !== null) {
-			tEl.dataset["lat"] = element.latlng.coordinates[0];
-			tEl.dataset["lng"] = element.latlng.coordinates[1];
-		}
-		tEl.classList.add("person");
+		dataJson.forEach(element => {
+			//console.log(element);
 
-		const name = document.createElement("div");
-		name.classList.add("name");
-		name.innerHTML = element.last + ", " + element.first;
-		tEl.appendChild(name);
-
-		const phone = document.createElement("div");
-		phone.classList.add("phone");
-		phone.innerHTML = element.phone;
-		tEl.appendChild(phone);
-
-		const address = document.createElement("div");
-		address.classList.add("address");
-
-		const addrElements = ["street", "city", "province", "country", "postal"];
-		addrElements.forEach(e => {
-			if (element[e] !== undefined) {
-				const el = document.createElement("div");
-				el.classList.add(e);
-				el.innerHTML = element[e];
-				address.appendChild(el);
+			if (element.latlng) {
+				let tmpMarker = new mapboxgl.Marker()
+					.setLngLat([
+						element.latlng.coordinates[1],
+						element.latlng.coordinates[0]
+					])
+					.addTo(map);
+				markers.push(tmpMarker);
 			}
+			const tEl = document.createElement("div");
+			tEl.id = element.personId;
+			if (element.latlng !== null) {
+				tEl.dataset["lat"] = element.latlng.coordinates[0];
+				tEl.dataset["lng"] = element.latlng.coordinates[1];
+			}
+			tEl.classList.add("person");
+
+			const del = document.createElement("div");
+			del.innerHTML = "<button>&#x1f5d1</button>";
+			del.classList.add("delete");
+
+			del.addEventListener("click", async () => {
+
+				console.log(del.parentElement.id);
+				const delURI = addressBook.del(del.parentElement.id);
+				load(1);
+
+				const response = await fetch(delURI);
+				await response.json();
+
+				load(-1);
+				loadAddressBook();
+				console.log(delURI);
+			});
+			tEl.appendChild(del);
+
+			const name = document.createElement("div");
+			name.classList.add("name");
+			name.innerHTML = element.last + ", " + element.first;
+			tEl.appendChild(name);
+
+			const phone = document.createElement("div");
+			phone.classList.add("phone");
+			phone.innerHTML = element.phone;
+			tEl.appendChild(phone);
+
+			const address = document.createElement("div");
+			address.classList.add("address");
+
+			const addrElements = ["street", "city", "province", "country", "postal"];
+			addrElements.forEach(e => {
+				if (element[e] !== undefined) {
+					const el = document.createElement("div");
+					el.classList.add(e);
+					el.innerHTML = element[e];
+					address.appendChild(el);
+				}
+			});
+
+			tEl.appendChild(address);
+
+			tEl.addEventListener("click", () => {
+				entryClick(map, tEl);
+			});
+
+			parent.appendChild(tEl);
 		});
 
-		tEl.appendChild(address);
+		elPeople.appendChild(parent);
+	};
 
-		tEl.addEventListener("click", () => {
-			entryClick(map, tEl);
-		});
-
-		parent.appendChild(tEl);
-	});
-
-	elPeople.appendChild(parent);
+	loadAddressBook();
 });

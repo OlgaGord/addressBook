@@ -1,71 +1,88 @@
 body {
-	background-color: rgb(235, 235, 245);
+  background-color: rgb(235, 235, 245);
 }
 
 h1 {
-	display: inline-block;
-	padding: 3px 5px;
+  display: inline-block;
+  padding: 3px 5px;
+}
+
+#loading {
+  position: fixed;
+  top: 2px;
+  right: 2px;
+  display: block;
+}
+#loading > img {
+  width: 38px;
+}
+.delete {
+  /* float: right; */
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
 }
 
 #addEntry {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100vw;
-	height: 100vh;
-	background-color: rgba(20, 20, 20, 0.3);
-	z-index: 100;
-	display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(20, 20, 20, 0.3);
+  z-index: 100;
+  display: none;
 }
 
 #entryForm {
-	margin: 20px auto;
-	width: 300px;
-	background-color: #efefef;
-	border: 2px solid rgb(10, 25, 35);
-	border-radius: 2px;
-	padding: 4px;
+  margin: 20px auto;
+  width: 300px;
+  background-color: #efefef;
+  border: 2px solid rgb(10, 25, 35);
+  border-radius: 2px;
+  padding: 4px;
 }
 
 #map {
-	position: fixed;
-	bottom: 0;
-	right: 0;
-	width: 30vw;
-	height: 40vh;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 30vw;
+  height: 40vh;
 }
 
 .person {
-	cursor: pointer;
-	padding: 5px;
+  cursor: pointer;
+  padding: 5px;
+  position: relative;
 }
 
 .phone {
-	font-style: italic;
+  font-style: italic;
 }
 
 .name {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 #people > span > div:nth-child(even) {
-	background-color: #efefef;
+  background-color: #efefef;
 }
 
 #people > span > div:hover {
-	background-color: rgb(10, 25, 35);
-	color: #efefef;
+  background-color: rgb(10, 25, 35);
+  color: #efefef;
 }
 
 #people {
-	display: flex;
-	flex-direction: column;
-	flex-wrap: wrap;
-	max-width: 450px;
-	min-width: 120px;
-	width: 50%;
-	margin: 0 auto;
-	border: 2px solid rgb(10, 25, 35);
-	border-radius: 2px;
-	background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  max-width: 450px;
+  min-width: 120px;
+  width: 50%;
+  margin: 0 auto;
+  border: 2px solid rgb(10, 25, 35);
+  border-radius: 2px;
+  background-color: #fff;
 }
