@@ -1,0 +1,61 @@
+body {
+  background-color: lightgrey;
+}
+
+#map {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 40vw;
+  height: 50vh;
+  background-color: aqua;
+}
+
+.person {
+  cursor: pointer;
+  padding: 5px;
+}
+
+#people > span > div:nth-child(even) {
+  background-color: white;
+}
+
+#people > span > div:hover {
+  background-color: darkgray;
+  color: white;
+}
+
+#addEntry {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(20, 20, 20, 0.3);
+  z-index: 100;
+}
+
+#entryForm {
+  margin: 10px audi;
+  width: 300px;
+  background-color: white;
+  border-radius: 2px;
+  padding: 4px;
+}
+
+#people {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  max-width: 450px;
+  min-width: 120px;
+  width: 50%;
+  margin: 0 auto;
+  border: 2px solid rgb(10, 15, 25);
+  border-radius: 2px;
+  background-color: rgb(235, 235, 235);
+}
+
+.phone {
+  font-style: italic;
+}

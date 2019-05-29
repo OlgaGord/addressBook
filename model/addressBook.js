@@ -74,7 +74,7 @@ module.exports = class {
 
 		conn.end();
 
-		return { addressID: addressID, personId: personId };
+		return { addressID: addressId, personId: personId };
 
 	}
 };
